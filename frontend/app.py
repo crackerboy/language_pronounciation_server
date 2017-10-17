@@ -1,9 +1,15 @@
 #!/usr/bin/python3
 from flask import Flask, request
 from flask_restful import Resource, Api
-from sql_classes import Base, Sample
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+import os,sys,inspect,json
+
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0,os.path.join(parentdir,'backend'))
+
+from sql_classes import Base, Sample
 
 _MYSQL_URL_ = 'mysql://root:senior-design-2@localhost:3306/teamc'
 
@@ -20,14 +26,13 @@ class CompareAudio(Resource):
     def post(self):
         # Load samples and input sample into memory
         word, input_audio = (request.form['word'], request.files['audio_file'])
-        file_paths = session.query(Sample.file_path).filter(Sample.word == word).all()
-        files = {file_path: open(file_path,'r') for file_path in file_paths} #be sure to close files
+        file_paths = [x[0] for x in session.query(Sample.file_path).filter(Sample.word == word).all()]
 
         # Magic
         score = 0
-        for path, file_obj in files.items():
-            file_obj.close()
-        return "{word:{},score:{}}".format(word,score)
+
+        obj = {'word':word, 'score':score}
+        return json.dumps(obj)
 
 api.add_resource(CompareAudio, '/')
 if __name__=='__main__':
