@@ -7,9 +7,8 @@ Disclaimer: Heavily influenced by tutorial at https://librosa.github.io/librosa/
 
 To-DO: SAVE recieved file with timestamp in tmp folder, use the timestamp as the filename.
 '''
-import librosa
+import librosa, math
 import numpy as np
-import pdb
 from itertools import starmap
 
 _HOP_LENGTH_ = 512
@@ -38,6 +37,17 @@ def extract_features(y, sr):
     beat_features = np.vstack([beat_chroma, beat_mfcc_delta])
     return beat_features
 
+def normalize(vector_a, vector_b):
+    '''
+    Function should normalize vectors relative to each other. (sum of a row is 1)
+    Does this by concatenating to matrix, normalizing, then splitting back into vectors
+    '''
+    matrix = np.column_stack((vector_a, vector_b))
+    row_sums = matrix.sum(axis=1)
+    matrix_norm = matrix/row_sums[:,np.newaxis]
+    a_norm, b_norm = np.split(matrix_norm,2,axis=1)
+    return a_norm, b_norm
+
 def pipeline(input_file_path, files_to_compare):
     # Extracting features
     in_y, in_sr = librosa.load(input_file_path)
@@ -47,12 +57,14 @@ def pipeline(input_file_path, files_to_compare):
 
     # Aggregating local features
     local_feature_aggregate = [features.mean(1) for features in local_features]
-    aggregate_of_local_feature_aggregate = np.array(means).mean(0)
+    local_feature_aggregate = np.array(local_feature_aggregate).mean(0)
 
     # Aggregating input features
     in_feature_aggregate = in_features.mean(1)
 
-    # Working on comparing aggregates, perhaps normalizing both matrices wit the same method will help?
+    # Working on comparing aggregates, perhaps normalizing both vectors with the same method will help?
+    local_feature_aggregate, in_feature_aggregate = normalize(local_feature_aggregate, in_feature_aggregate)
 
-    pdb.set_trace()
-    print("wow")
+    mean_difference = math.fabs(np.mean(local_feature_aggregate - in_feature_aggregate))
+    mean_similarity = 1 - mean_difference
+    return mean_similarity
