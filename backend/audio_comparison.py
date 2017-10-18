@@ -4,10 +4,13 @@ Description: Runs feature extraction on input audio, as well as all matching loc
 Subsequently aggregates all local audio file features into a 'mean' feature matrix and compares this with input audio feature matrix.
 
 Disclaimer: Heavily influenced by tutorial at https://librosa.github.io/librosa/tutorial.html
+
+To-DO: SAVE recieved file with timestamp in tmp folder, use the timestamp as the filename.
 '''
-import librosa, io
+import librosa
 import numpy as np
-import soundfile as sf
+import pdb
+from itertools import starmap
 
 _HOP_LENGTH_ = 512
 
@@ -35,12 +38,21 @@ def extract_features(y, sr):
     beat_features = np.vstack([beat_chroma, beat_mfcc_delta])
     return beat_features
 
-def pipeline(input_file, files_to_compare):
-    bytes_buffer = io.BytesIO(input_file.read())
-    in_y, in_sr = sf.read(bytes_buffer)
+def pipeline(input_file_path, files_to_compare):
+    # Extracting features
+    in_y, in_sr = librosa.load(input_file_path)
     local_data = [(y,sr) for y,sr in map(librosa.load, files_to_compare)]
-
     in_features = extract_features(in_y, in_sr)
-    local_features = [features for features in map(extract_features, local_data)]
+    local_features = [features for features in starmap(extract_features, local_data)]
 
-    local_aggregation = #working here
+    # Aggregating local features
+    local_feature_aggregate = [features.mean(1) for features in local_features]
+    aggregate_of_local_feature_aggregate = np.array(means).mean(0)
+
+    # Aggregating input features
+    in_feature_aggregate = in_features.mean(1)
+
+    # Working on comparing aggregates, perhaps normalizing both matrices wit the same method will help?
+
+    pdb.set_trace()
+    print("wow")
