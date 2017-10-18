@@ -47,6 +47,11 @@ class CompareAudio(Resource):
         obj = {'word':word, 'score':score}
         return json.dumps(obj)
 
-api.add_resource(CompareAudio, '/')
+api.add_resource(CompareAudio, '/api')
+
+@app.route('/')
+def test_connection():
+    return '<html><body><h1>You can connect to the Flask app...</h1></body></html>'
+
 if __name__=='__main__':
     app.run(port=1337,debug=True)

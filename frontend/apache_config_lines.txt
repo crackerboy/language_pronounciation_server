@@ -1,0 +1,18 @@
+# Author: Josue caraballo
+# Description: These are lines you need to add in the apache config file to route traffic to this app.
+# MOD WSGI - found with mod_wsgi-express module-config
+LoadModule wsgi_module "/usr/local/lib/python3.5/dist-packages/mod_wsgi/server/mod_wsgi-py35.cpython-35m-x86_64-linux-gnu.so"
+WSGIPythonHome "/usr"
+# APP
+<VirtualHost *>
+    ServerName 174.138.55.47
+    
+    WSGIDaemonProcess app user=josh group=josh threads=5
+    WSGIScriptAlias /app /home/josh/app/prod/frontend/app.wsgi
+
+    <Directory /home/josh/app/prod/frontend>
+        WSGIProcessGroup app
+        WSGIApplicationGroup %{GLOBAL}
+        Require all granted
+    </Directory>
+</VirtualHost>
