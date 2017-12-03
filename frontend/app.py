@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_restful import Resource, Api
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -16,6 +16,7 @@ _MYSQL_URL_ = 'mysql://root:senior-design-2@localhost:3306/teamc'
 _TMP_FOLDER_ = '/temp_audio'
 
 app = Flask(__name__)
+app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
 api = Api(app)
 
 engine = create_engine(_MYSQL_URL_)
@@ -45,9 +46,29 @@ class CompareAudio(Resource):
         os.remove(temp_file_path)
 
         obj = {'word':word, 'score':score}
-        return json.dumps(obj)
+        return jsonify(obj)
 
 api.add_resource(CompareAudio, '/api')
+
+# DEBUGGING INFO
+#@app.before_request
+#def before():
+#    if [k for k in request.files]:
+#        sys.stderr.write('Request info:\n')
+#        sys.stderr.write('Request Headers:\n')
+#        sys.stderr.write(str(request.headers))
+#        sys.stderr.write('\n')
+#        sys.stderr.write('Request Form Keys + Values:\n')
+#        sys.stderr.write(str([(k,v) for (k,v) in request.form.items()]))
+#        sys.stderr.write('\n')
+#        sys.stderr.write('Request Files:\n')
+#        keys = [k for k in request.files]
+#        sys.stderr.write(str(keys))
+#        sys.stderr.write('\n')
+#        sys.stderr.write('Request File Info:\n')
+#        sys.stderr.write(str(request.files[keys[0]].headers)+'\n'+str(request.files[keys[0]].mimetype))
+#        sys.stderr.write('\n')
+#        pass
 
 @app.route('/')
 def test_connection():
