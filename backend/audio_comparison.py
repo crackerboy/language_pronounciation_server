@@ -65,6 +65,6 @@ def pipeline(input_file_path, files_to_compare):
     # Working on comparing aggregates, perhaps normalizing both vectors with the same method will help?
     local_feature_aggregate, in_feature_aggregate = normalize(local_feature_aggregate, in_feature_aggregate)
 
-    mean_difference = math.fabs(np.mean(local_feature_aggregate - in_feature_aggregate))
+    mean_difference = math.fabs(np.mean(np.absolute(local_feature_aggregate) - np.absolute(in_feature_aggregate)))
     mean_similarity = 1 - mean_difference
     return mean_similarity

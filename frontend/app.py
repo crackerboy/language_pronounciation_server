@@ -41,14 +41,21 @@ class CompareAudio(Resource):
         file_paths = [x[0] for x in session.query(Sample.file_path).filter(Sample.word == word).all()]
 
         score = pipeline(temp_file_path, file_paths) # magic
-
+        
         # Delete the temporary copy of the file
         os.remove(temp_file_path)
 
         obj = {'word':word, 'score':score}
         return jsonify(obj)
 
+class SQLInterface(Resource):
+    def get(self):
+        # Get the words from the database
+        words = {'words':[x[0] for x in session.query(Sample.word).distinct().all()]}
+        return jsonify(words)
+
 api.add_resource(CompareAudio, '/api')
+api.add_resource(SQLInterface, '/words')
 
 # DEBUGGING INFO
 #@app.before_request
