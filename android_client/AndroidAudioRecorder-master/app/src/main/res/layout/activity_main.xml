@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/AudioRecord"
+android:background="#ffe6e6"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:paddingBottom="16dp"
+android:paddingLeft="16dp"
+android:paddingRight="16dp"
+android:paddingTop= "16dp"
+tools:context="seniordesign.teamc.languageapplication.example.Record"
+android:textAlignment="center">
+
+    <Button
+    android:text="Record your sound"
+    android:layout_height="wrap_content"
+    android:id="@+id/RecordButton"
+    android:onClick="recordAudio"
+    android:layout_width="100dp"
+    android:background="#F6CEF5"
+    android:fontFamily="sans-serif-light"
+    android:layout_alignBaseline="@+id/CompareButton"
+    android:layout_alignBottom="@+id/CompareButton"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/CompareButton"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:background="#F6CEF5"
+        android:fontFamily="sans-serif-light"
+        android:onClick="onClickSendAudio"
+        android:text="Send to compare" />
+
+    <TextView
+        android:id="@+id/WordDisplay"
+        android:layout_width="match_parent"
+        android:layout_height="65sp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/GetButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="35dp"
+        android:fontFamily="sans-serif-light"
+        android:text="To start, get a word from the server."
+        android:textAlignment="center"
+        android:textColor="@android:color/background_dark"
+        android:textSize="25sp" />
+
+    <Button
+        android:id="@+id/GetButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="34dp"
+        android:background="#CEECF5"
+        android:fontFamily="sans-serif-light"
+        android:onClick="onClickGetWord"
+        android:text="Get a word from server" />
+
+    <TextView
+        android:id="@+id/AccuracyDisplay"
+        android:layout_width="match_parent"
+        android:layout_height="100sp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/CompareButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="sans-serif-medium"
+        android:paddingTop="50dp"
+        android:text="Accuracy"
+        android:textAlignment="center"
+        android:textColor="@android:color/background_dark"
+        android:textSize="30sp" />
+<ImageView
+    android:id="@+id/ivuta"
+    android:src="@drawable/utarlington"
+    android:cropToPadding="false"
+    android:layout_width="120dp"
+    android:layout_height="120dp"
+    android:layout_marginTop="450dp"
+    android:layout_alignParentTop="true"
+    android:layout_centerHorizontal="true" />
+
+</RelativeLayout>
